@@ -1,0 +1,69 @@
+//Employee hiyerarşisinin bulunduğu örnekte, maaşı 7.000 TL ve üzerinde olanlar için SalaryPaidOnBankException isimli bir sıradışı durum nesnesi oluşturup örneği tekrar düzenleyin
+
+public class HR {
+
+	public static Employee getAnEmployee() {		
+		Employee e = null;
+		
+		int i = (int) (5 * Math.random());
+		switch (i) {
+		case 1:
+			e = new Secretary(2, "Sevim", 9, "Sales", new Manager(3, "Kamil", 17, "Sales", "Sales"));
+			break;
+		case 2:
+			e = new Engineer(4, "Burhan", 5, "Production", "Improving production.");
+			break;
+		case 3:
+			e = new Manager(5, "Ismail", 14, "Production", "Production");
+			break;
+		case 4:
+			e = new Director(6, "Salih", 24, "Management", "Management", 4500);
+			break;
+		}
+		return e;
+	}
+}
+
+public class PayrollOffice {
+
+	public void paySalary(Employee e) throws SalaryPaidOnBankException{
+		
+		double salary = e.calculateSalary();
+
+		if(salary>7000) 
+		{
+		throw new SalaryPaidOnBankException("Dear "+e.getName()+" please receive your "+salary+" salary through your bank");
+		}
+    else
+			System.out.println("Paying a salary of " + salary + " to " + e.getName());
+	}
+}
+
+
+public class SalaryPaidOnBankException extends Exception {
+	
+	public SalaryPaidOnBankException(String message){
+		super(message);
+		}
+}
+
+public class Test {
+
+	public static void main(String[] args) {
+		
+	PayrollOffice pay = new PayrollOffice();
+
+	for(int i =0; i<=5 ; i++) {
+		Employee e = HR.getAnEmployee();
+
+		if(e != null) {
+			try {
+			pay.paySalary(e);
+			} catch (SalaryPaidOnBankException e1) {
+			System.out.println(e1.getMessage());
+			}
+		}
+	}	
+
+	}
+}
